@@ -1,12 +1,15 @@
 'use strict'
+const HeaderConstant = require('../constants/header.constant')
 const { StatusCodes, ReasonPhrases } = require('../statusCodes/httpStatusCode')
 
 class SuccessResponse {
-    constructor ({ message, statusCode, reasonPhase, metadata = {}, options = {}}) {
+    constructor ({ message, statusCode, reasonPhase, metadata = {}, options = {}, cookies = {}, clearCookie = false}) {
         this.message = !message ? reasonPhase : message
         this.status = statusCode
         this.metadata = metadata
         this.options = options
+        this.cookies = cookies
+        this.clearCookie = clearCookie
     }
 
     // send = (res, headers = {}) => {
@@ -21,6 +24,18 @@ class SuccessResponse {
 
     send = (res) => {
         //wasnt tested header
+        
+        if (this.cookies && !this.clearCookie) {
+            for (const [name, { value, options }] of Object.entries(this.cookies)) {
+                res.cookie(name, value, options)
+                console.log('---set-cookie: ' + name, value, options)
+            }
+        }
+        if (this.clearCookie === true) {
+            res.clearCookie(HeaderConstant.AUTHORIZATION)
+            res.clearCookie(HeaderConstant.REFRESHTOKEN)
+        }
+
         return res.status(this.status).json(this)
     }
 }
@@ -38,7 +53,24 @@ class CREATEDResponse extends SuccessResponse {
     }
 }
 
+class NO_CONTENTReponse extends SuccessResponse {
+    constructor ({ message, statusCode = StatusCodes.NO_CONTENT, reasonPhase = ReasonPhrases.NO_CONTENT, metadata = {}, options = {} }) {
+        super({message, statusCode, reasonPhase, metadata, options})
+    }
+}
+
+const cookieConstructor = ({name, value, options = {httpOnly, maxAge}}) => {
+    return {
+        [name]: {
+            value: value,
+            options: options
+        }
+    }
+}
+
 module.exports = {
-    OKResponse
-    ,CREATEDResponse
+    OKResponse,
+    CREATEDResponse,
+    NO_CONTENTReponse,
+    cookieConstructor
 }

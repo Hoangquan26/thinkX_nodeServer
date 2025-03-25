@@ -1,6 +1,9 @@
 const express = require('express')
 const morgan = require('morgan')
 const compression = require('compression')
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
+
 const helmet = require('helmet')
 const { NotFoundError } = require('./common/responses/errorReponse')
 const app = express()
@@ -8,10 +11,15 @@ const app = express()
 //define env config
 require('dotenv').config();
 
+app.use(cors({
+    credentials: true
+}))
+
 //initial middleware
 app.use(morgan('dev'))
 app.use(compression())
 app.use(helmet())
+app.use(cookieParser())
 app.use(express.json())
 
 //initial database

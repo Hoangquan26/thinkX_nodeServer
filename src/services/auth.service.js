@@ -1,12 +1,12 @@
 
 //require repo
-const { findUserByEmailLean, createDefaultUser } = require("../models/repos/user.repo")
+const { findUserByEmailLean, createDefaultUser, findUserByIdLean } = require("../models/repos/user.repo")
 
 //require util
 const { hashBcryptSync, compareBcryptSync } = require('../providers/bcrypt.provider')
 const { getInstanceData } = require("../providers/lodash.provider")
-const { BadRequestError, ForbiddenError } = require('../common/responses/errorReponse')
-const { signJWTPair } = require('../providers/jwt.provider')
+const { BadRequestError, ForbiddenError, UnauthorizedError } = require('../common/responses/errorReponse')
+const { signJWTPair, decodeJWT, signJWT } = require('../providers/jwt.provider')
 
 //require constant
 const { ACCESS_CONSTANT } = require("../common/constants/access.constant")
@@ -14,6 +14,7 @@ const { ACCESS_CONSTANT } = require("../common/constants/access.constant")
 //load config
 const configs = require('../configs/app.config')
 const PRIVATE_KEY = configs.PRIVATE_KEY
+const PUBLIC_KEY = configs.PUBLIC_KEY
 
 class AuthService {
     static register = async({email, password, username}) => {
@@ -32,13 +33,12 @@ class AuthService {
 
     static login = async({email, password}) => {
         const foundUser = await findUserByEmailLean(email)
-        if(!foundUser) throw new BadRequestError('User is not registered!')
+        if(!foundUser) throw new BadRequestError('User isn\'t exist !')
 
         const validPassword = compareBcryptSync(password, foundUser.hashedPassword)
         if(!validPassword) throw new BadRequestError('Wrong password')
         
         const payload = getInstanceData({object: foundUser, key: ACCESS_CONSTANT.PAYLOAD})
-        console.log(PRIVATE_KEY)
         const tokens = signJWTPair({payload, privateKey: PRIVATE_KEY})
 
         return {
@@ -47,8 +47,25 @@ class AuthService {
         }
     }
 
-    static refreshToken = async() => {
+    static refreshToken = async({refreshToken}) => {
+        const decodeUser = decodeJWT({token: refreshToken, publicKey: PUBLIC_KEY})
+        if (decodeUser.status === 'error') {
+            throw new UnauthorizedError('Please login again')
+        }
 
+        const {_id: userId } = decodeUser 
+        const foundUser = await findUserByIdLean(userId)
+        if(!foundUser) throw new UnauthorizedError('Please login again')
+
+        const payload = getInstanceData({object: foundUser, key: ACCESS_CONSTANT.PAYLOAD})
+        const accessToken = signJWT({payload, privateKey: PRIVATE_KEY})
+        return {
+            tokens: {
+                accessToken,
+                refreshToken
+            },
+            user: getInstanceData({object: foundUser, key: ACCESS_CONSTANT.RESPONSE.LOGIN})
+        }
     }
 
     static logout = async() => {

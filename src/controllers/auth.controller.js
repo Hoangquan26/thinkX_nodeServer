@@ -1,6 +1,7 @@
 const AuthService = require('../services/auth.service')
 const asyncHandle = require('../helpers/asyncHandle')
-const { OKResponse, CREATEDResponse } = require('../common/responses/successReponse') 
+const { OKResponse, CREATEDResponse, cookieConstructor, NO_CONTENTReponse } = require('../common/responses/successReponse') 
+const HeaderConstant = require('../common/constants/header.constant')
 class AuthController {
     static register = async(req, res, next) => {
         const {email, username, password} = req.body
@@ -16,14 +17,33 @@ class AuthController {
 
         new OKResponse({
             message: 'Login successful',
-            metadata
+            metadata,
+            cookies: {
+                ...cookieConstructor({name: 'refreshToken', value: metadata.tokens.refreshToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7}}),
+                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 2}})
+            }
         }).send(res)
     }
-    static refreshToken = (req, res, next) => {
-        
+
+
+    static refreshToken = async(req, res, next) => {
+        const refreshToken = req.cookies[HeaderConstant.REFRESHTOKEN]
+
+        const metadata = await AuthService.refreshToken({refreshToken})
+        new CREATEDResponse({
+            message: 'Refresh token successful',
+            metadata,
+            cookies: {
+                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 2}})
+            }
+        }).send(res)
     }
-    static logout = (req, res, next) => {
-    
+    static logout = async(req, res, next) => {
+        console.log('---logout')
+        new NO_CONTENTReponse({
+            message: 'Logout successful',
+            clearCookie: true
+        }).send(res)
     } 
 }
 module.exports = AuthController

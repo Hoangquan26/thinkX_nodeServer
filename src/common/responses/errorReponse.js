@@ -26,7 +26,7 @@ class GoneError extends ErrorResponse{
     }
 }
 
-class AuthenticateError extends ErrorResponse {
+class UnauthorizedError extends ErrorResponse {
     constructor( message = ReasonPhrases.UNAUTHORIZED, status = StatusCodes.UNAUTHORIZED ) {
         super(message, status)
     }
@@ -53,7 +53,7 @@ class UnprocesstableError extends ErrorResponse {
 module.exports = {
     BadRequestError,
     ConflictRequestError,
-    AuthenticateError,
+    UnauthorizedError,
     NotFoundError,
     ForbiddenError,
     GoneError,
