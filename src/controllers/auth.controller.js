@@ -11,6 +11,7 @@ class AuthController {
             metadata
         }).send(res)
     }
+    
     static login = async(req, res, next) => {
         const {email, password} = req.body
         const metadata = await AuthService.login({email, password})
@@ -20,11 +21,10 @@ class AuthController {
             metadata,
             cookies: {
                 ...cookieConstructor({name: 'refreshToken', value: metadata.tokens.refreshToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7}}),
-                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 2}})
+                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {maxAge: 1000 * 60 * 60 * 2}})
             }
         }).send(res)
     }
-
 
     static refreshToken = async(req, res, next) => {
         const refreshToken = req.cookies[HeaderConstant.REFRESHTOKEN]
@@ -34,10 +34,11 @@ class AuthController {
             message: 'Refresh token successful',
             metadata,
             cookies: {
-                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 2}})
+                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {maxAge: 1000 * 60 * 60 * 2}})
             }
         }).send(res)
     }
+
     static logout = async(req, res, next) => {
         console.log('---logout')
         new NO_CONTENTReponse({
