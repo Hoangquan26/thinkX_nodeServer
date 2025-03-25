@@ -28,6 +28,7 @@ class AuthValidation {
 
         try {
             const isValid = await correctValidation.validateAsync(req.body, {abortEarly: true})
+            console.log(isValid)
             return next()
         }
         catch(error) {

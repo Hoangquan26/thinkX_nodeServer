@@ -4,8 +4,8 @@ export const OBJECT_ID_RULE_MESSAGE = 'Your string fails to match the Object Id 
 
 export const FIELD_REQUIRED_MESSAGE = 'This field is required.';
 
-export const USERNAME_RULE = /^[0-9a-fA-F]{8,256}$/;
-export const USERNAME_RULE_MESSAGE = 'Your username must at leat 8 characters';
+export const USERNAME_RULE = /^(?!.*[_.]{2})[a-zA-Z0-9][a-zA-Z0-9._]{2,28}[a-zA-Z0-9]$/;
+export const USERNAME_RULE_MESSAGE = 'Username must be 3-30 characters long, can include letters, numbers, "_" and ".", but cannot start or end with them.';
 
 // ✅ Email validation rule
 export const EMAIL_RULE = /^\S+@\S+\.\S+$/;

@@ -7,13 +7,11 @@ const signJWT = ({payload, privateKey}) => {
 
 const signJWTPair = ({payload, privateKey}) => {
     const accessToken = jwt.sign(payload, privateKey, {
-        expiresIn: '2h',
-        algorithm: 'RS256'
+        expiresIn: '2h'
     })
 
     const refreshToken = jwt.sign(payload, privateKey, {
-        expiresIn: '7d',
-        algorithm: 'RS256'
+        expiresIn: '7d'
     })
 
     return { accessToken, refreshToken }

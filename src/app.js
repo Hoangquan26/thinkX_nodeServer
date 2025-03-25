@@ -12,6 +12,10 @@ require('dotenv').config();
 app.use(morgan('dev'))
 app.use(compression())
 app.use(helmet())
+app.use(express.json())
+
+//initial database
+require('./dbs/init.mongoose')
 
 //initial routers
 app.use('/v1', require('./routers/v1/index'))

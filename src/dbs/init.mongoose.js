@@ -37,5 +37,5 @@ class Database {
     }
 }
 
-const instaceMongoDb = Database.getInstances()
+const instaceMongoDb = Database.getInstance()
 return instaceMongoDb

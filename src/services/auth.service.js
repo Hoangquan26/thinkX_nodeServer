@@ -24,7 +24,7 @@ class AuthService {
         const newUser = await createDefaultUser({ email, hashedPassword, username })
         if(!newUser) throw new ForbiddenError('Something was wrong!')
 
-        const payload = getInstanceData({object: newUser, key: ACCESS_CONSTANT.REGISTER.RESPONSE_USER_FIELD})
+        const payload = getInstanceData({object: newUser, key: ACCESS_CONSTANT.RESPONSE.REGISTER})
         return {
             user: payload
         }
@@ -38,11 +38,12 @@ class AuthService {
         if(!validPassword) throw new BadRequestError('Wrong password')
         
         const payload = getInstanceData({object: foundUser, key: ACCESS_CONSTANT.PAYLOAD})
-
+        console.log(PRIVATE_KEY)
         const tokens = signJWTPair({payload, privateKey: PRIVATE_KEY})
 
         return {
-            tokens
+            tokens,
+            user: getInstanceData({object: foundUser, key: ACCESS_CONSTANT.RESPONSE.LOGIN})
         }
     }
 

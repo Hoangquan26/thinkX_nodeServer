@@ -1,8 +1,10 @@
 'use strict'
 
 export const ACCESS_CONSTANT = {
-    REGISTER: {
-        RESPONSE_USER_FIELD: ['_id', 'email', 'username', 'role', 'createAt']
-    },
-    PAYLOAD: ['_id', 'email', 'username', 'role']
+
+    PAYLOAD: ['_id', 'email', 'username', 'role'],
+    RESPONSE: {
+        REGISTER: ['_id', 'email', 'username', 'role', 'createAt'],
+        LOGIN: ['_id', 'email', 'username', 'role']
+    }
 }
