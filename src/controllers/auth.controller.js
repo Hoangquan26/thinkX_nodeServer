@@ -5,7 +5,7 @@ const HeaderConstant = require('../common/constants/header.constant')
 class AuthController {
     static register = async(req, res, next) => {
         const {email, username, password} = req.body
-        const metadata = await AuthService.register({email, password, username})
+        const metadata = await AuthService.register({email, password})
         new CREATEDResponse({
             message: 'Login successful',
             metadata

@@ -19,7 +19,6 @@ class Database {
             mongoose.set('debug', true)
             mongoose.set('debug', {color: true})
         }
-
         mongoose.connect(appConfig.CONNECTION_STRING)
         .then(_ => {
             console.log(`Connected MongoDb By Mongoose`)

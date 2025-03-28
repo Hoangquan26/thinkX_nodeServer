@@ -5,7 +5,6 @@ const { UnprocesstableError } = require('../common/responses/errorReponse')
 class AuthValidation {
     static register = async(req, res, next) => {
         const correctValidation = Joi.object({
-            username: Joi.string().required().pattern(USERNAME_RULE).message(USERNAME_RULE_MESSAGE),
             email: Joi.string().required().pattern(EMAIL_RULE).message(EMAIL_RULE_MESSAGE),
             password: Joi.string().required().pattern(PASSWORD_RULE).message(PASSWORD_RULE_MESSAGE)
         })
