@@ -10,6 +10,8 @@ class SuccessResponse {
         this.options = options
         this.cookies = cookies
         this.clearCookie = clearCookie
+
+        console.log(this)
     }
 
     // send = (res, headers = {}) => {
@@ -23,39 +25,43 @@ class SuccessResponse {
     // }
 
     send = (res) => {
-        //wasnt tested header
-        
-        if (this.cookies && !this.clearCookie) {
+        if (this.cookies && Object.keys(this.cookies).length > 0) {
+            console.log('---set-cookie: ', this.cookies);
             for (const [name, { value, options }] of Object.entries(this.cookies)) {
-                res.cookie(name, value, options)
-                console.log('---set-cookie: ' + name, value, options)
+                res.cookie(name, value, options);
             }
         }
-        if (this.clearCookie === true) {
-            res.clearCookie(HeaderConstant.AUTHORIZATION)
-            res.clearCookie(HeaderConstant.REFRESHTOKEN)
+
+        // Clear cookie nếu cần
+        if (this.clearCookie) {
+            console.log('---clear-cookie: ');
+            res.clearCookie(HeaderConstant.REFRESHTOKEN); // Đặt tên cookie chính xác
         }
 
-        return res.status(this.status).json(this)
+        return res.status(this.status).json({
+            ...this,
+            clearCookie: null,
+            cookies: null
+        });
     }
 }
 
 class OKResponse extends SuccessResponse {
-    constructor ({ message, statusCode = StatusCodes.OK, reasonPhase = ReasonPhrases.OK, metadata = {}, options = {} }) {
-        super({message, statusCode, reasonPhase, metadata, options})
+    constructor ({ message, statusCode = StatusCodes.OK, reasonPhase = ReasonPhrases.OK, metadata = {}, options = {}, cookies, clearCookie }) {
+        super({message, statusCode, reasonPhase, metadata, options, cookies, clearCookie})
     }
 }
 
 
 class CREATEDResponse extends SuccessResponse {
-    constructor ({ message, statusCode = StatusCodes.CREATED, reasonPhase = ReasonPhrases.CREATED, metadata = {}, options = {} }) {
-        super({message, statusCode, reasonPhase, metadata, options})
+    constructor ({ message, statusCode = StatusCodes.CREATED, reasonPhase = ReasonPhrases.CREATED, metadata = {}, options = {}, cookies, clearCookie }) {
+        super({message, statusCode, reasonPhase, metadata, options, cookies, clearCookie})
     }
 }
 
 class NO_CONTENTReponse extends SuccessResponse {
-    constructor ({ message, statusCode = StatusCodes.NO_CONTENT, reasonPhase = ReasonPhrases.NO_CONTENT, metadata = {}, options = {} }) {
-        super({message, statusCode, reasonPhase, metadata, options})
+    constructor ({ message, statusCode = StatusCodes.NO_CONTENT, reasonPhase = ReasonPhrases.NO_CONTENT, metadata = {}, options = {}, cookies, clearCookie }) {
+        super({message, statusCode, reasonPhase, metadata, options, cookies, clearCookie})
     }
 }
 

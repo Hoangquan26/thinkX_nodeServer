@@ -7,7 +7,7 @@ class AuthController {
         const {email, username, password} = req.body
         const metadata = await AuthService.register({email, password, username})
         new CREATEDResponse({
-            message: 'Login successful',
+            message: 'Create account successful',
             metadata
         }).send(res)
     }
@@ -20,8 +20,7 @@ class AuthController {
             message: 'Login successful',
             metadata,
             cookies: {
-                ...cookieConstructor({name: 'refreshToken', value: metadata.tokens.refreshToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7}}),
-                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {maxAge: 1000 * 60 * 60 * 2}})
+                ...cookieConstructor({name: 'refreshToken', value: metadata.tokens.refreshToken, options: {httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7, secure: true}}),
             }
         }).send(res)
     }
@@ -32,10 +31,7 @@ class AuthController {
         const metadata = await AuthService.refreshToken({refreshToken})
         new CREATEDResponse({
             message: 'Refresh token successful',
-            metadata,
-            cookies: {
-                ...cookieConstructor({name: 'accessToken', value: metadata.tokens.accessToken, options: {maxAge: 1000 * 60 * 60 * 2}})
-            }
+            metadata
         }).send(res)
     }
 

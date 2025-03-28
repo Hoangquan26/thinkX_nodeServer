@@ -12,7 +12,8 @@ const app = express()
 require('dotenv').config();
 
 app.use(cors({
-    credentials: true
+    credentials: true,
+    origin: 'http://localhost:5173'
 }))
 
 //initial middleware
