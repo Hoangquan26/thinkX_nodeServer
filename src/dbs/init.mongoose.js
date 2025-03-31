@@ -6,8 +6,6 @@ const DatabaseType = {
     MYSQL: 'mysql'
 }
 
-
-
 class Database {
     constructor() {
         this.connect()
