@@ -31,10 +31,10 @@ class AuthService {
         const payload = getInstanceData({object: newUser, key: ACCESS_CONSTANT.RESPONSE.REGISTER})
 
         //send mail
-        sendVerifyMail({
-            repicientEmail: newUser.email,
-            verifyToken: newUser.verifyToken
-        })
+        // sendVerifyMail({
+        //     repicientEmail: newUser.email,
+        //     verifyToken: newUser.verifyToken
+        // })
         return {
             user: payload
         }
