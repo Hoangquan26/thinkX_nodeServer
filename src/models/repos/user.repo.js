@@ -13,11 +13,12 @@ const findUserById = (userId) => {
 
 
 //DEFAULT CREATE
-const createDefaultUser = async({email, hashedPassword ,username = "UNKNOWN"}) => {
+const createDefaultUser = async({email, hashedPassword ,username, verifyToken}) => {
     return await userModel.create({
         email,
         hashedPassword,
-        username
+        username,
+        verifyToken
     })
 }
 

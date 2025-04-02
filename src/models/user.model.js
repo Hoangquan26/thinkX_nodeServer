@@ -11,7 +11,8 @@ const userSchema = new Schema({
     hashedPassword: { type: String, required: true },
     role: { type: String, enum: [UserRole.STUDENT, UserRole.INSTRUCTOR, UserRole.ADMIN], default: UserRole.STUDENT },
     courses_enrolled: { type: Array, default: []},
-    status: { type: String, enum: [DocumentStatus.ACTIVE, DocumentStatus.INACTIVE], default: DocumentStatus.ACTIVE}
+    status: { type: String, enum: [DocumentStatus.ACTIVE, DocumentStatus.INACTIVE], default: DocumentStatus.ACTIVE} ,
+    verifyToken: {type: String, required: true, unique: true}
 }, {
     timestamps: true,
     collection: COLLECTION_NAME
