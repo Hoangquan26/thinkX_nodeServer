@@ -7,6 +7,8 @@ const UserRole = require('../../../common/constants/userRole')
 
 // 🔒 Học viên đăng ký khóa học
 router.use(authUserMiddleware)
+router.get('/my-courses', asyncHandle(EnrollmentController.getMyCourses));
+
 router.post('/:courseId', asyncHandle(EnrollmentController.enrollInCourse))
 router.get('/my', asyncHandle(EnrollmentController.getMyEnrollments))
 
