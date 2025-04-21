@@ -8,7 +8,11 @@ const appConfig = {
         PRIVATE_KEY: process.env.DEV_PRIVATE_KEY,
         MAIL_APIKEY: process.env.DEV_MAIL_APIKEY,
         MAIL_ADDRESS: process.env.DEV_MAIL_ADDRESS,
-        MAIL_NAME: process.env.DEV_MAIL_NAME
+        MAIL_NAME: process.env.DEV_MAIL_NAME,
+        MAIL_HOST: process.env.MAIL_HOST || "smtp.gmail.com",
+        MAIL_PORT: process.env.MAIL_PORT || 587,
+        MAIL_USER: process.env.MAIL_USER || "your-email@gmail.com",
+        MAIL_PASS: process.env.MAIL_PASS || "your-email-password",
         //mail using brevo thirf party service
     },
     pro: {
@@ -20,7 +24,11 @@ const appConfig = {
         PRIVATE_KEY: process.env.PRO_PRIVATE_KEY,
         MAIL_APIKEY: process.env.PRO_MAIL_APIKEY,
         MAIL_ADDRESS: process.env.PRO_MAIL_ADDRESS,
-        MAIL_NAME: process.env.PRO_MAIL_NAME
+        MAIL_NAME: process.env.PRO_MAIL_NAME,
+        MAIL_HOST: process.env.MAIL_HOST || "smtp.gmail.com",
+        MAIL_PORT: process.env.MAIL_PORT || 587,
+        MAIL_USER: process.env.MAIL_USER || "your-email@gmail.com",
+        MAIL_PASS: process.env.MAIL_PASS || "your-email-password",
     }
 }
 

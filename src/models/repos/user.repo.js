@@ -23,13 +23,35 @@ const createDefaultUser = async({email, hashedPassword ,username, verifyToken}) 
 }
 
 //LEAN QUERY
-const findUserByEmailLean = (email) => {
-    return userModel.findOne({email}).lean()
+const findUserByEmailLean = async(email) => {
+    return await userModel.findOne({email}).lean()
 }
 
-const findUserByIdLean = (userId) => {
+const findUserByIdLean = async(userId) => {
     userId = convertObjectId(userId)
-    return userModel.findById(userId).lean()
+    return await userModel.findById(userId).lean()
+}
+
+//UPDATE 
+const updateUserById = async(userId, updateData) => {
+    userId = convertObjectId(userId)
+    const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        updateData,
+        {
+          new: true, 
+          runValidators: true, 
+        }
+    )
+    .select("-hashedPassword -verifyToken") 
+    .lean();
+    return updatedUser;
+}
+
+const updateUserPassword = async(userId, hashedPassword) => {
+    return await userModel.findByIdAndUpdate(userId, {
+        hashedPassword: newHashedPassword
+    });
 }
 
 
@@ -38,5 +60,7 @@ module.exports = {
     createDefaultUser,
     findUserByEmailLean,
     findUserById,
-    findUserByIdLean
+    findUserByIdLean,
+    updateUserById,
+    updateUserPassword
 }

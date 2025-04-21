@@ -18,16 +18,18 @@ const authUserMiddleware = async(req, res, next) => {
             if(decodeUser.message.includes('jwt expired')) return next(new GoneError())
             return next(new UnauthorizedError('Invalid access token'))
         }
-    
-        console.log('---decodeUser:::', decodeUser)
         const { _id: userId } = decodeUser
         const foundUser = await findUserByIdLean(userId)
-        console.log(foundUser)
         if (!foundUser) {
             return next(new UnauthorizedError('User does not exist'))
         }
     
-        req.user = decodeUser 
+        req.user = {
+            ...decodeUser,
+            role: foundUser.role
+        } 
+
+        console.log(req.user, "---request user")
         return next()
     }
     catch(err) {
@@ -35,6 +37,28 @@ const authUserMiddleware = async(req, res, next) => {
     }
 }
 
+const authRoleMiddleware = (roles) => {
+    return async(req, res, next) => {
+        try {
+            const user = req.user
+            if (!user) {
+                return next(new UnauthorizedError('User not found'))
+            }
+            const { role } = user
+            console.log(role, roles)
+
+            if (!roles.includes(role)) {
+                return next(new UnauthorizedError('User does not have permission'))
+            }
+            return next()
+        }
+        catch(err) {
+            return next(new Error(err.message))
+        }
+    }
+}
+
 module.exports = {
-    authUserMiddleware
+    authUserMiddleware,
+    authRoleMiddleware
 }

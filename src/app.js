@@ -13,7 +13,7 @@ require('dotenv').config();
 
 app.use(cors({
     credentials: true,
-    origin: 'http://localhost:5173'
+    origin: ['http://localhost:5173', 'http://localhost:5174']
 }))
 
 //initial middleware
@@ -40,7 +40,8 @@ app.use((err, req, res, next) => {
     return res.status(500).json({
         message: err.message || 'Internal Server Error',
         status: 'error',
-        statusCode: statusCode
+        statusCode: statusCode,
+        stack: err.stack
     })
 })
 

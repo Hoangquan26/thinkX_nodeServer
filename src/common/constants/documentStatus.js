@@ -3,4 +3,13 @@ const DocumentStatus = {
     INACTIVE: 'inactive'
 }
 
-module.exports = DocumentStatus
+const InstructorRequestStatus = {
+    PENDING: 'pending',
+    APPROVED: 'approved',
+    REJECTED: 'rejected'
+}
+
+module.exports = {
+    InstructorRequestStatus,
+    DocumentStatus
+}

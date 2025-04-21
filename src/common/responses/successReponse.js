@@ -10,8 +10,6 @@ class SuccessResponse {
         this.options = options
         this.cookies = cookies
         this.clearCookie = clearCookie
-
-        console.log(this)
     }
 
     // send = (res, headers = {}) => {
@@ -26,7 +24,6 @@ class SuccessResponse {
 
     send = (res) => {
         if (this.cookies && Object.keys(this.cookies).length > 0) {
-            console.log('---set-cookie: ', this.cookies);
             for (const [name, { value, options }] of Object.entries(this.cookies)) {
                 res.cookie(name, value, options);
             }
@@ -34,7 +31,6 @@ class SuccessResponse {
 
         // Clear cookie nếu cần
         if (this.clearCookie) {
-            console.log('---clear-cookie: ');
             res.clearCookie(HeaderConstant.REFRESHTOKEN); // Đặt tên cookie chính xác
         }
 

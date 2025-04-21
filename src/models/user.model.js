@@ -1,6 +1,6 @@
 const { Types, Schema, model } = require('mongoose')
 const UserRole = require('../common/constants/userRole')
-const DocumentStatus = require('../common/constants/documentStatus')
+const {DocumentStatus} = require('../common/constants/documentStatus')
 
 const DOCUMENT_NAME = 'user'
 const COLLECTION_NAME = 'users'
@@ -12,7 +12,8 @@ const userSchema = new Schema({
     role: { type: String, enum: [UserRole.STUDENT, UserRole.INSTRUCTOR, UserRole.ADMIN], default: UserRole.STUDENT },
     courses_enrolled: { type: Array, default: []},
     status: { type: String, enum: [DocumentStatus.ACTIVE, DocumentStatus.INACTIVE], default: DocumentStatus.ACTIVE} ,
-    verifyToken: {type: String, required: true, unique: true}
+    verifyToken: {type: String, unique: true},
+    isActive: {type: Boolean, default: false}
 }, {
     timestamps: true,
     collection: COLLECTION_NAME

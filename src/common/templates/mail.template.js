@@ -2,12 +2,12 @@
 
 //import configs
 const configs = require('../../configs/app.config')
-const WEBSITE_DOMAIN = configs.WEBSITE_DOMAIN
+const WEBSITE_DOMAIN = configs.WEBSITE_DOMAIN ?? 'http://localhost:5173'
 
 const verificationLink = `${WEBSITE_DOMAIN}/account/verification?email={{{email}}}&token={{{verifyToken}}}`
 const verificationSubject = 'ThinkX Edu Appilication: Please verify your account to using out service'
 const verifyHTMLContent = `
-    <h3>Click <a href="{{{verificationLink}}}">here</a> to verify your account </h3>    
+    <h3>Click <a href="{{{verificationLink}}}">here</a> to verify your account : "{{{verificationLink}}}"</h3>    
 `
 
 const getVerificationLink = ({email, verifyToken}) => {
@@ -17,7 +17,7 @@ const getVerificationLink = ({email, verifyToken}) => {
 const getVerificationSubject = () => verificationSubject
 
 const getVerificationContent = ({verificationLink}) => {
-    return verifyHTMLContent.replace('{{{verificationLink}}}', verificationLink)
+    return verifyHTMLContent.replace('{{{verificationLink}}}', verificationLink).replace('{{{verificationLink}}}', verificationLink)
 }
 module.exports = {
     getVerificationLink,
